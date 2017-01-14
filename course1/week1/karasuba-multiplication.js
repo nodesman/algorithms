@@ -47,14 +47,44 @@ function s2n(a) {
   });
 }
 
-function multiplyIntegers(first, second) {
+function zeroPad(number, digits) {
+  number = number.reverse();
 
-  if (!first) {
-    console.log("Invalid input");
-    process.exit();
-    return;
+  if (number.length < digits) {
+
+    var original_length = number.length;
+    var topad = digits - original_length;
+    for (var iter = 0; iter < topad; iter++) {
+      number.push(0);
+    }
   }
-  console.log("F:", first, "S:",  second);
+  number = number.reverse();
+  return number;
+}
+
+function lowerIndent() {
+  indent = indent.split('').splice(1).join('');
+}
+var indent = "";
+
+function exit() {
+  process.exit();
+}
+function multiplyIntegers(first, second) {
+  indent += " ";
+  while (first[0] == 0 && first.length !== 1) {
+    first.shift();
+  }
+
+  if (first.length === 1 && first[0] == 0 || second.length == 1 && second[0] == 0) {
+    lowerIndent();
+    return [0];
+  }
+
+  while (second[0] == 0 && second.length !== 1) {
+    second.shift();
+  }
+  console.log(indent, "F:", first, "S:",  second);
 
   if (first.length === 1 && second.length === 1) {
     var result = first[0] * second[0];
@@ -62,30 +92,39 @@ function multiplyIntegers(first, second) {
     result = result.map(function(item) {
       return parseInt(item);
     });
+    lowerIndent();
     return result;
   }
 
-  //split the number in half
-  var m = Math.floor(first.length / 2);
+  //which is longer?
+  var length = first.length > second.length ? first.length: second.length;
+  var m = Math.floor(length / 2);
+  var first = zeroPad(first, length);
+  var second = zeroPad(second, length);
 
   var a = first.slice(0, m);
   var b = first.slice(m);
   var c = second.slice(0, m);
   var d = second.slice(m);
 
-  var ab = multiplyIntegers(a, b);
-  var cd = multiplyIntegers(c, d);
+  var ac = multiplyIntegers(a, c);
+  var bd = multiplyIntegers(b, d);
 
   var tene2m = tenE(2*m);
   var tenem = tenE(m);
 
-  var ac = multiplyIntegers(a, c);
-  var bd = multiplyIntegers(b, d);
+  var ad = multiplyIntegers(a, d);
+  var bc = multiplyIntegers(b, c);
+  console.log(ad, bc);
 
-  var acplusbd = sum(ac, bd);
+  var acplusbd = sum(ad, bc);
 
-  var result = sum(multiplyIntegers(tene2m, ab), multiplyIntegers(acplusbd, tenem), bd);
+  console.log(tene2m, ac, acplusbd, tenem, bd);
+  
+exit();
+  var result = sum(multiplyIntegers(tene2m, ac), multiplyIntegers(acplusbd, tenem), bd);
 
+  lowerIndent();
   return result;
 }
 
@@ -115,4 +154,4 @@ second = second.map(function(item, index){
   return parseInt(item);
 });
 
-multiplyIntegers([1,2,3,4], [5,6,7,8]);
+multiplyIntegers([1,0,0], [5]);
