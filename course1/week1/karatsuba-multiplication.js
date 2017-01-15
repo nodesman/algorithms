@@ -2,7 +2,6 @@
 function sum() {
   var numbers = arguments.length;
   var largest = 0;
-
   //find the largest.
   for (var iter = 0; iter < numbers; iter++) {
     if (arguments[iter].length > arguments[largest].length) {
@@ -12,8 +11,12 @@ function sum() {
 
   var list = Array.prototype.slice.call(arguments);
 
-  list = list.map(function (number) {
-    return number.reverse();
+  list = list.map(function (item) {
+    return item.slice();
+  })
+
+  list.forEach(function (number) {
+    number.reverse();
   });
 
   var size = arguments[largest].length;
@@ -22,11 +25,13 @@ function sum() {
 
   for (var iter =0; iter < size; iter++) {
     var subsum = 0;
+
     for (var j=0; j < list.length; j++) {
       if (undefined !== list[j][iter]) {
         subsum += list[j][iter];
       }
     }
+
     subsum += carryOver;
     var contributingDigit = subsum % 10;
     sum.push(contributingDigit);
@@ -34,7 +39,8 @@ function sum() {
   }
 
   if (carryOver !== 0) {
-    sum.push(carryOver);
+    var carryover = carryOver.toString().split('').map(function (item) { return parseInt(item); }).reverse();
+    sum = sum.concat(carryover);
   }
 
   sum = sum.reverse()
@@ -70,35 +76,59 @@ var indent = "";
 function exit() {
   process.exit();
 }
+
+
 function multiplyIntegers(first, second) {
+
   indent += " ";
+
+  // console.log(indent, first, second);
+
   while (first[0] == 0 && first.length !== 1) {
     first.shift();
-  }
-
-  if (first.length === 1 && first[0] == 0 || second.length == 1 && second[0] == 0) {
-    lowerIndent();
-    return [0];
   }
 
   while (second[0] == 0 && second.length !== 1) {
     second.shift();
   }
-  console.log(indent, "F:", first, "S:",  second);
 
-  if (first.length === 1 && second.length === 1) {
+  var fs = first.join('');
+  var ss = second.join('');
+
+  if (fs === '10' && ss.length == 1 || ss === '10' && fs.length == 1) {
+    fs = parseInt(fs);
+    ss = parseInt(ss);
+    result = fs * ss;
+    result = result.toString().split('')
+    result = result.map(function(item) {
+      return parseInt(item);
+    })
+    lowerIndent();
+    // console.log(indent, first, 'x', second, " = ", result);
+    return result;
+  }
+
+  if (first.length === 1 && first[0] == 0 || second.length == 1 && second[0] == 0) {
+    lowerIndent();
+    // console.log(indent,first, 'x', second, " = ", [0]);
+    return [0];
+  }
+
+  if (first.length == 1 && second.length == 1) {
     var result = first[0] * second[0];
     result = result.toString().split('');
     result = result.map(function(item) {
       return parseInt(item);
     });
     lowerIndent();
+    // console.log(indent,first, 'x', second, " = ", result);
     return result;
   }
 
   //which is longer?
   var length = first.length > second.length ? first.length: second.length;
   var m = Math.floor(length / 2);
+  console.log(indent, "m:", m);
   var first = zeroPad(first, length);
   var second = zeroPad(second, length);
 
@@ -115,16 +145,17 @@ function multiplyIntegers(first, second) {
 
   var ad = multiplyIntegers(a, d);
   var bc = multiplyIntegers(b, c);
-  console.log(ad, bc);
 
   var acplusbd = sum(ad, bc);
 
-  console.log(tene2m, ac, acplusbd, tenem, bd);
-  
-exit();
-  var result = sum(multiplyIntegers(tene2m, ac), multiplyIntegers(acplusbd, tenem), bd);
+
+  var f = multiplyIntegers(tene2m, ac), d = multiplyIntegers(acplusbd, tenem), s = bd;
+  console.log(indent, acplusbd, tenem, "10e("+m+")", d)
+
+  var result = sum(f,d,s);
 
   lowerIndent();
+  // console.log(indent,first, 'x', second, " = ", result);
   return result;
 }
 
@@ -154,4 +185,23 @@ second = second.map(function(item, index){
   return parseInt(item);
 });
 
-multiplyIntegers([1,0,0], [5]);
+// console.log(multiplyIntegers([1], [1,0,9,9]))
+console.log(multiplyIntegers([1,0], [1,0,0]))
+
+// for (var iter = 0; iter < 2000; iter++) {
+//   for (var  subiter= 0; subiter < 2000; subiter++) {
+//
+//     var a = iter;
+//     var b = subiter;
+//
+//     var res = multiplyIntegers(a.toString().split(''), b.toString().split(''))
+//
+//     var result = parseInt(res.join(''));
+//
+//     console.log(result);
+//     if (result !== a*b) {
+//       console.log(a, " x ",b)
+//     }
+//
+//   }
+// }
