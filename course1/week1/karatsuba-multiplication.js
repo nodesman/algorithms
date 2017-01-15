@@ -77,12 +77,15 @@ function exit() {
   process.exit();
 }
 
+function isPowerOf10(i) {
+  i = parseInt(i);
+  var s = Math.log10(i);
+  return Number.isInteger(s);
+}
 
 function multiplyIntegers(first, second) {
 
   indent += " ";
-
-  // console.log(indent, first, second);
 
   while (first[0] == 0 && first.length !== 1) {
     first.shift();
@@ -95,16 +98,25 @@ function multiplyIntegers(first, second) {
   var fs = first.join('');
   var ss = second.join('');
 
-  if (fs === '10' && ss.length == 1 || ss === '10' && fs.length == 1) {
-    fs = parseInt(fs);
-    ss = parseInt(ss);
-    result = fs * ss;
-    result = result.toString().split('')
+  if (isPowerOf10(fs) || isPowerOf10(ss)) {
+
+    lowerIndent();
+
+    result = (isPowerOf10(fs))?ss.split(''):fs.split('');
+    power = (isPowerOf10(fs))?Math.log10(parseInt(fs)):Math.log10(parseInt(ss));
+
+    for (var iter = 0; iter < power; iter++) {
+      result.push(0);
+    }
+
     result = result.map(function(item) {
       return parseInt(item);
-    })
+    });
+
+    return result;
+  } else if( fs === '1' || ss === '1') {
     lowerIndent();
-    // console.log(indent, first, 'x', second, " = ", result);
+    result = (fs === '1')? second.slice() : first.slice();
     return result;
   }
 
@@ -121,14 +133,13 @@ function multiplyIntegers(first, second) {
       return parseInt(item);
     });
     lowerIndent();
-    // console.log(indent,first, 'x', second, " = ", result);
     return result;
   }
 
   //which is longer?
   var length = first.length > second.length ? first.length: second.length;
   var m = Math.floor(length / 2);
-  console.log(indent, "m:", m);
+  var e  = Math.ceil(length/2);
   var first = zeroPad(first, length);
   var second = zeroPad(second, length);
 
@@ -140,22 +151,18 @@ function multiplyIntegers(first, second) {
   var ac = multiplyIntegers(a, c);
   var bd = multiplyIntegers(b, d);
 
-  var tene2m = tenE(2*m);
-  var tenem = tenE(m);
+  var tene2m = tenE(2*e);
+  var tenem = tenE(e);
 
   var ad = multiplyIntegers(a, d);
   var bc = multiplyIntegers(b, c);
 
   var acplusbd = sum(ad, bc);
-
-
   var f = multiplyIntegers(tene2m, ac), d = multiplyIntegers(acplusbd, tenem), s = bd;
-  console.log(indent, acplusbd, tenem, "10e("+m+")", d)
 
   var result = sum(f,d,s);
 
   lowerIndent();
-  // console.log(indent,first, 'x', second, " = ", result);
   return result;
 }
 
@@ -185,23 +192,27 @@ second = second.map(function(item, index){
   return parseInt(item);
 });
 
-// console.log(multiplyIntegers([1], [1,0,9,9]))
-console.log(multiplyIntegers([1,0], [1,0,0]))
+// console.log(multiplyIntegers([2,1,0,0], [1,0,0,0]))
 
-// for (var iter = 0; iter < 2000; iter++) {
-//   for (var  subiter= 0; subiter < 2000; subiter++) {
-//
-//     var a = iter;
-//     var b = subiter;
-//
-//     var res = multiplyIntegers(a.toString().split(''), b.toString().split(''))
-//
-//     var result = parseInt(res.join(''));
-//
-//     console.log(result);
-//     if (result !== a*b) {
-//       console.log(a, " x ",b)
-//     }
-//
-//   }
-// }
+for (var iter = 0; iter < 2000; iter++) {
+  for (var  subiter= 0; subiter < 2000; subiter++) {
+
+    var a = iter;
+    var b = subiter;
+    console.log( a, " x ", b)
+
+    a = a.toString().split('').map(function (i) { return parseInt(i); });
+
+    b = b.toString().split('').map(function (i) { return parseInt(i); });
+
+    var res = multiplyIntegers(a, b)
+
+    var result = parseInt(res.join(''));
+
+    if (result !== a*b) {
+      console.log(a, " x ",b)
+    } else {
+      console.log("Correct!")
+    }
+  }
+}
