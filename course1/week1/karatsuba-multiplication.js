@@ -178,8 +178,8 @@ function tenE(power) {
   return result;
 }
 
-first  = "1234567890987654321"
-second = "9876543212345678900"
+first  = "1234567812345678123456781234567812345678123456781234567812345678"
+second = "8765432187654321876543218765432187654321876543218765432187654321"
 
 var first = first.split('');
 var second = second.split('');
@@ -192,27 +192,4 @@ second = second.map(function(item, index){
   return parseInt(item);
 });
 
-// console.log(multiplyIntegers([2,1,0,0], [1,0,0,0]))
-
-for (var iter = 0; iter < 2000; iter++) {
-  for (var  subiter= 0; subiter < 2000; subiter++) {
-
-    var a = iter;
-    var b = subiter;
-    console.log( a, " x ", b)
-
-    a = a.toString().split('').map(function (i) { return parseInt(i); });
-
-    b = b.toString().split('').map(function (i) { return parseInt(i); });
-
-    var res = multiplyIntegers(a, b)
-
-    var result = parseInt(res.join(''));
-
-    if (result !== a*b) {
-      console.log(a, " x ",b)
-    } else {
-      console.log("Correct!")
-    }
-  }
-}
+console.log(multiplyIntegers(first, second).join(''));
