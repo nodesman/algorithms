@@ -68,11 +68,6 @@ function zeroPad(number, digits) {
   return number;
 }
 
-function lowerIndent() {
-  indent = indent.split('').splice(1).join('');
-}
-var indent = "";
-
 function exit() {
   process.exit();
 }
@@ -84,8 +79,6 @@ function isPowerOf10(i) {
 }
 
 function multiplyIntegers(first, second) {
-
-  indent += " ";
 
   while (first[0] == 0 && first.length !== 1) {
     first.shift();
@@ -100,8 +93,6 @@ function multiplyIntegers(first, second) {
 
   if (isPowerOf10(fs) || isPowerOf10(ss)) {
 
-    lowerIndent();
-
     result = (isPowerOf10(fs))?ss.split(''):fs.split('');
     power = (isPowerOf10(fs))?Math.log10(parseInt(fs)):Math.log10(parseInt(ss));
 
@@ -115,14 +106,11 @@ function multiplyIntegers(first, second) {
 
     return result;
   } else if( fs === '1' || ss === '1') {
-    lowerIndent();
     result = (fs === '1')? second.slice() : first.slice();
     return result;
   }
 
   if (first.length === 1 && first[0] == 0 || second.length == 1 && second[0] == 0) {
-    lowerIndent();
-    // console.log(indent,first, 'x', second, " = ", [0]);
     return [0];
   }
 
@@ -132,7 +120,6 @@ function multiplyIntegers(first, second) {
     result = result.map(function(item) {
       return parseInt(item);
     });
-    lowerIndent();
     return result;
   }
 
@@ -162,7 +149,6 @@ function multiplyIntegers(first, second) {
 
   var result = sum(f,d,s);
 
-  lowerIndent();
   return result;
 }
 
@@ -178,8 +164,8 @@ function tenE(power) {
   return result;
 }
 
-first  = "1234567812345678123456781234567812345678123456781234567812345678"
-second = "8765432187654321876543218765432187654321876543218765432187654321"
+first  = "3141592653589793238462643383279502884197169399375105820974944592"
+second = "2718281828459045235360287471352662497757247093699959574966967627"
 
 var first = first.split('');
 var second = second.split('');
