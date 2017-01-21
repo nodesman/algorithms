@@ -23,16 +23,24 @@ function readLine (line) {
       return parseInt(i);
     });
 
-    var greatest = numbers[0] * numbers[1];
+    //find maximum and second largest
+    var max, secondmax;
+    if (numbers[0] > numbers[1]) {
+      max = numbers[0];
+      secondmax = numbers[1];
+    } else {
+      max = numbers[1];
+      secondmax = numbers[0];
+    }
 
-    for (var i = 0; i < numbers.length; i++) {
-      for (var j = i+1; j < numbers.length; j++) {
-        var product = numbers[i] * numbers[j];
-        if (product > greatest) {
-          greatest = product;
-        }
+    for (var iter = 0; iter < numbers.length; iter++) {
+      if (numbers[iter] > max) {
+        secondmax = max;
+        max = numbers[iter];
       }
     }
+
+    greatest = max * secondmax;
 
     console.log(greatest);
 

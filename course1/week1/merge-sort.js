@@ -40,7 +40,7 @@ function mergeSort(list) {
 function bubble(list) {
   for (var iter = 0; iter < list.length; iter++) {
     for (var j = iter; j < list.length; j++) {
-      if (list[j] > list[iter]) {
+      if (list[j] < list[iter]) {
         tmp = list[iter];
         list[iter] = list[j]
         list[j] = tmp;
