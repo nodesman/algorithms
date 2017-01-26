@@ -1,60 +1,37 @@
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
-        BigInteger a = s.nextBigInteger();
+        long a = s.nextLong();
         int m = s.nextInt();
 
-        BigInteger lastDigit = fibonacciDigit(a, m);
+        BigInteger lastDigit = fibonacciModulus(a, m);
 
         System.out.println(lastDigit);
     }
 
-    private static BigInteger fibonacciDigit(BigInteger n, int m) {
-
-        BigInteger iter = new BigInteger(String.valueOf(2));
-
-        ArrayList<BigInteger> mods = new ArrayList<>();
+    private static BigInteger fibonacciModulus(long n, int m) {
 
         BigInteger s = BigInteger.ZERO;
         BigInteger l = BigInteger.ONE;
-        BigInteger c = null;
+        BigInteger c;
+        long cm, lm, sm;
 
-        BigInteger sm, lm = BigInteger.ONE, cm = BigInteger.ONE;
+        ArrayList<Long> mods = new ArrayList<>();
+        mods.add(0L);
+        mods.add(1L);
 
-        for (; 0 < n.compareTo(iter) && !((lm.equals(BigInteger.ZERO) && cm.equals(BigInteger.ONE))); ) {
-            System.out.println(iter);
-
+        for (long iter = 2; iter < n; iter++) {
             c = s.add(l);
 
-            lm = l.mod(BigInteger.valueOf(m));
-            cm = c.mod(BigInteger.valueOf(m));
-            sm = s.mod(BigInteger.valueOf(m));
+            cm = c.mod(BigInteger.valueOf(m)).longValue();
+            lm = l.mod(BigInteger.valueOf(m)).longValue();
+            
 
-            if (lm.equals(BigInteger.ZERO) && cm.equals(BigInteger.ONE)) {
-                break;
-            }
-
-            s = new BigInteger(String.valueOf(l));
-            l = new BigInteger(String.valueOf(c));
-
-            mods.add(sm);
-            iter = iter.add(BigInteger.ONE);
         }
-
-        if (n.equals(iter.subtract(BigInteger.valueOf(1)))) {
-            return c.mod(BigInteger.valueOf(m));
-        }
-
-        BigInteger size = BigInteger.valueOf(mods.size());
-
-        BigInteger index = n.mod(size);
-
-        return mods.get(index.intValue());
     }
 }
