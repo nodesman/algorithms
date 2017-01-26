@@ -21,6 +21,6 @@ class FibbonacciLastDigit {
         }
 
         BigInteger number = list[iter-1];
-        return number % 10;
+        return number;
     }
 }
